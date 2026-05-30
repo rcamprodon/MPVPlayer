@@ -43,8 +43,10 @@ int main(int argc, char *argv[])
         fflush(stderr);
     });
 
-    if (!player.initialize(0))
+    if (!player.initialize(0)) {
+        fprintf(stderr, "Failed to initialize player.\n");
         return 1;
+    }
 
     return app.exec();
 }
