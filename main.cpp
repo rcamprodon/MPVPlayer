@@ -116,7 +116,8 @@ int main(int argc, char **argv) {
         std::cerr << "Volume must be between 0 and 100.\n";
         continue;
       }
-      const int result = mpv_set_property(mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+      const int result =
+          mpv_set_property(mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
       if (result < 0) {
         std::cerr << "Failed to set volume: " << mpv_error_string(result) << '\n';
       }
@@ -130,7 +131,8 @@ int main(int argc, char **argv) {
         std::cerr << "Speed must be greater than 0.\n";
         continue;
       }
-      const int result = mpv_set_property(mpv, "speed", MPV_FORMAT_DOUBLE, &speed);
+      const int result =
+          mpv_set_property(mpv, "speed", MPV_FORMAT_DOUBLE, &speed);
       if (result < 0) {
         std::cerr << "Failed to set speed: " << mpv_error_string(result) << '\n';
       }
