@@ -26,7 +26,7 @@ void printHelp() {
             << "  vol <0-100>        Set volume\n"
             << "  speed <value>      Set playback speed\n"
             << "  mute               Toggle mute\n"
-            << "  quit               Exit\n";
+            << "  quit/exit          Exit\n";
 }
 } // namespace
 
@@ -112,12 +112,16 @@ int main(int argc, char **argv) {
         std::cerr << "Usage: vol <0-100>\n";
         continue;
       }
+      if (volume < 0.0 || volume > 100.0) {
+        std::cerr << "Volume must be between 0 and 100.\n";
+        continue;
+      }
       const int result = mpv_set_property(mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
       if (result < 0) {
         std::cerr << "Failed to set volume: " << mpv_error_string(result) << '\n';
       }
     } else if (cmd == "speed") {
-      double speed = 1.0;
+      double speed = 0.0;
       if (!(input >> speed)) {
         std::cerr << "Usage: speed <value>\n";
         continue;
