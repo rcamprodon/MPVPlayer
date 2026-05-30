@@ -80,8 +80,9 @@ int main(int argc, char **argv) {
       const char *args[] = {"cycle", "pause", nullptr};
       runCommand(mpv, args);
     } else if (cmd == "play") {
-      int pause = 0;
-      const int result = mpv_set_property(mpv, "pause", MPV_FORMAT_FLAG, &pause);
+      int pauseFlag = 0;
+      const int result =
+          mpv_set_property(mpv, "pause", MPV_FORMAT_FLAG, &pauseFlag);
       if (result < 0) {
         std::cerr << "Failed to resume: " << mpv_error_string(result) << '\n';
       }
@@ -100,9 +101,11 @@ int main(int argc, char **argv) {
         std::cerr << "Usage: seek <seconds>\n";
         continue;
       }
-      std::string value = std::to_string(seconds);
-      const char *args[] = {"seek", value.c_str(), "absolute", nullptr};
-      runCommand(mpv, args);
+      const int result =
+          mpv_set_property(mpv, "time-pos", MPV_FORMAT_DOUBLE, &seconds);
+      if (result < 0) {
+        std::cerr << "Failed to seek: " << mpv_error_string(result) << '\n';
+      }
     } else if (cmd == "vol") {
       double volume = 0.0;
       if (!(input >> volume)) {
