@@ -126,6 +126,10 @@ int main(int argc, char **argv) {
         std::cerr << "Usage: speed <value>\n";
         continue;
       }
+      if (speed <= 0.0) {
+        std::cerr << "Speed must be greater than 0.\n";
+        continue;
+      }
       const int result = mpv_set_property(mpv, "speed", MPV_FORMAT_DOUBLE, &speed);
       if (result < 0) {
         std::cerr << "Failed to set speed: " << mpv_error_string(result) << '\n';
