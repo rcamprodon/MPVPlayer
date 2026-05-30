@@ -51,12 +51,21 @@ bool MpvPlayer::initialize(qint64 wid) {
   mpv_set_option_string(m_mpv, "vo", "gpu");
   mpv_set_option_string(m_mpv, "hwdec", "no");
 
-  int64_t windowId = static_cast<int64_t>(wid);
-  if (mpv_set_option(m_mpv, "wid", MPV_FORMAT_INT64, &windowId) < 0) {
-    emit errorOccurred("Failed to set mpv wid");
-    mpv_destroy(m_mpv);
-    m_mpv = nullptr;
-    return false;
+  // Sync-first defaults for stable presentation timing.
+  mpv_set_option_string(m_mpv, "video-sync", "display-resample");
+  mpv_set_option_string(m_mpv, "interpolation", "yes");
+  mpv_set_option_string(m_mpv, "keep-open", "yes");
+  mpv_set_option_string(m_mpv, "hr-seek", "yes");
+  mpv_set_option_string(m_mpv, "audio-wait-open", "no");
+
+  if (wid != 0) {
+    int64_t windowId = static_cast<int64_t>(wid);
+    if (mpv_set_option(m_mpv, "wid", MPV_FORMAT_INT64, &windowId) < 0) {
+      emit errorOccurred("Failed to set mpv wid");
+      mpv_destroy(m_mpv);
+      m_mpv = nullptr;
+      return false;
+    }
   }
 
   if (mpv_initialize(m_mpv) < 0) {
